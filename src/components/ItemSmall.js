@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { fontType, colors } from '../theme';
 
+
 const ItemSmall = ({ resep, onPress }) => {
   return (
     <TouchableOpacity style={styles.resepItem} onPress={() => onPress(resep)}>

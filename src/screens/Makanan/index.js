@@ -1,7 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 
-const NasiGorengScreen = () => {
+const NasiGorengScreen = ({ route }) => {
+  const { recipeId, searchInput, onSaveRecipe } = route.params;
+
+  const handleSaveRecipe = () => {
+    const recipeToSave = {
+      id: recipeId,
+      title: 'Nasi Goreng', // Anda dapat mengambil informasi lain dari API atau sumber data lainnya
+      category: 'Makanan',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/6/61/Nasi_goreng_sari_laut.jpg',
+      level: 'Tingkatan Level Membuat : Sulit',
+    };
+
+    onSaveRecipe(recipeToSave);
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.section}>
@@ -55,6 +68,11 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 8,
     marginBottom: 10,
+  },
+  saveRecipeLink: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+    marginTop: 10,
   },
 });
 

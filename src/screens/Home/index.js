@@ -1,7 +1,7 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-//import Icon from 'react-native-vector-icons/FontAwesome';
+import React, { useRef } from 'react';
+import { ScrollView, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
 const BlogList = [
   {
     id: 1,
@@ -27,114 +27,127 @@ const BlogList = [
 ];
 const HomeScreen = () => {
   const navigation = useNavigation(); // Dapatkan objek navigasi
-
+  const scrollY = useRef(new Animated.Value(0)).current;
   const handleRecipePress = (recipeId, recipeType) => {
     // Navigasi ke halaman yang sesuai berdasarkan jenis resep
     if (recipeType === 'Makanan' && recipeId !== 3) {
       navigation.navigate('Makanan', { recipeId });
-    } else if (recipeType === 'Minuman') { 
+    } else if (recipeType === 'Minuman') {
       navigation.navigate('Jus', { recipeId });
     } else if (recipeType === 'Makanan' && recipeId === 3) {
       navigation.navigate('Sate', { recipeId });
     }
   };
+  const headerOpacity = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Cooking Food</Text>
-      <View style={styles.searchContainer}>
-        <TextInput style={styles.searchInput} placeholder="Cariresep..." />
-        <TouchableOpacity style={styles.searchButton}>
-          <Text style={styles.buttonText}>Search</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={styles.recipeContainer}>
-        {BlogList.map((recipe) => (
-          <TouchableOpacity
-            key={recipe.id}
-            onPress={() => handleRecipePress(recipe.id, recipe.category)} // Tambahkan recipe.category di sini
-            style={styles.recipeItem}
-          >
-            <Image source={{ uri: recipe.image }} style={styles.recipeImage} />
-            <Text style={styles.recipeTitle}>{recipe.title}</Text>
-            <Text style={styles.recipeLevel}>{recipe.level}</Text>
-            <Text style={styles.recipeCategory}>{recipe.category}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+    <Animated.Text style={[styles.title, { opacity: headerOpacity }]}>Cooking Food</Animated.Text>
+    <View style={styles.searchContainer}>
+      <TextInput style={styles.searchInput} placeholder="Cari resep..." />
+      <TouchableOpacity style={styles.searchButton}>
+        <Text style={styles.buttonText}>Search</Text>
+      </TouchableOpacity>
     </View>
-  );
+    <ScrollView
+      style={styles.recipeContainer}
+      onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false })}
+      scrollEventThrottle={16}
+    >
+      {BlogList.map((recipe) => (
+        <TouchableOpacity
+          key={recipe.id}
+          onPress={() => handleRecipePress(recipe.id, recipe.category)}
+          style={styles.recipeItem}
+        >
+          <Image source={{ uri: recipe.image }} style={styles.recipeImage} />
+          <Text style={styles.recipeTitle}>{recipe.title}</Text>
+          <Text style={styles.recipeLevel}>{recipe.level}</Text>
+          <Text style={styles.recipeCategory}>{recipe.category}</Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+  </View>
+);
 };
 
 const styles = StyleSheet.create({
   container: {
-  flex: 1,
-  backgroundColor: 'white',
-  padding: 16,
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 16,
+    marginTop: 1,
   },
   title: {
-  fontSize: 24,
-  fontFamily: 'Pjs-Bold',
-  color: 'black',
-  marginBottom: 16,
+    fontSize: 24,
+    fontFamily: 'Pjs-Bold',
+    color: 'black',
+    marginBottom: 16,
+    marginTop: 2,
   },
   recipeContainer: {
-  flex: 1,
+    flex: 1,
   },
   recipeItem: {
-  marginBottom: 20,
-  backgroundColor: 'grey',
-  borderRadius: 8,
-  padding: 16,
+    marginBottom: 20,
+    backgroundColor: 'grey',
+    borderRadius: 8,
+    padding: 16,
   },
   recipeImage: {
-  width: '100%',
-  height: 200,
-  borderRadius: 8,
-  marginBottom: 20,
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 20,
   },
   recipeTitle: {
-  fontSize: 20,
-  fontFamily: 'Pjs-Bold',
-  color: 'red',
-  marginBottom: 8,
+    fontSize: 20,
+    fontFamily: 'Pjs-Bold',
+    color: 'red',
+    marginBottom: 8,
   },
   recipeCategory: {
-  fontSize: 14,
-  fontFamily: 'Pjs-Regular',
-  color: 'red',
+    fontSize: 14,
+    fontFamily: 'Pjs-Regular',
+    color: 'red',
   },
   recipeLevel: {
-  fontSize: 16,
-  fontFamily: 'Pjs-Regular',
-  color: 'red',
-  marginBottom: 8,
+    fontSize: 16,
+    fontFamily: 'Pjs-Regular',
+    color: 'red',
+    marginBottom: 8,
   },
   searchContainer: {
-  flexDirection: 'row',
-  marginTop: 16, 
+    flexDirection: 'row',
+    marginTop: 16,
   },
   searchInput: {
-  flex: 1,
-  height: 40,
-  borderColor: 'grey',
-  borderWidth: 1,
-  borderRadius: 8,
-  marginRight: 8,
-  paddingLeft: 8,
+    flex: 1,
+    height: 40,
+    borderColor: 'grey',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginRight: 8,
+    paddingLeft: 8,
+    marginTop: -9,
   },
   searchButton: {
-  backgroundColor: 'blue',
-  borderRadius: 8,
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: 80,
-  height: 40,
-  marginBottom: 18,
+    backgroundColor: 'blue',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    height: 40,
+    marginBottom: 18,
+    marginTop: -9,
   },
   buttonText: {
-  fontSize: 16,
-  color: 'white',
+    fontSize: 16,
+    color: 'white',
   },
-  });
+});
 export default HomeScreen;

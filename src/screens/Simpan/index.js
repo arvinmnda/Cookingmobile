@@ -1,11 +1,19 @@
+// SimpanScreen.js
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const SimpanScreen = () => {
+  const navigation = useNavigation();
+
+  const handleFormButtonClick = () => {
+    navigation.navigate('FormPage');
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Simpan Resep</Text>
-      
+      {/* Tombol untuk pergi ke halaman formulir */}
+      <Button title="Buka Formulir" onPress={handleFormButtonClick} />
     </View>
   );
 };

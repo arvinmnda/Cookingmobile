@@ -5,10 +5,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/Home';  
 import ProfileScreen from '../screens/Profile';
 import SimpanScreen from '../screens/Simpan';
-import { Home3, Save2, Profile } from 'iconsax-react-native';
+import { Home3, Save2, Profile} from 'iconsax-react-native';
 import MakananScreen from '../screens/Makanan';
-import  JusApukatScreen from '../screens/Jus';
-import  SateScreen from '../screens/Sate';
+import JusApukatScreen from '../screens/Jus';
+import SateScreen from '../screens/Sate';
+import FormPage from '../screens/Formpage';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -21,8 +22,9 @@ const HomeStack = () => {
     >
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Makanan" component={MakananScreen} />
-      <Stack.Screen name="Jus" component={JusApukatScreen } />
-      <Stack.Screen name="Sate" component={SateScreen } />
+      <Stack.Screen name="Jus" component={JusApukatScreen} />
+      <Stack.Screen name="Sate" component={SateScreen} />
+      <Stack.Screen name="FormPage" component={FormPage} />
     </Stack.Navigator>
   );
 };

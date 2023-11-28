@@ -1,20 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 
-const NasiGorengScreen = ({ route }) => {
-  const { recipeId, searchInput, onSaveRecipe } = route.params;
-
-  const handleSaveRecipe = () => {
-    const recipeToSave = {
-      id: recipeId,
-      title: 'Nasi Goreng', // Anda dapat mengambil informasi lain dari API atau sumber data lainnya
-      category: 'Makanan',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/6/61/Nasi_goreng_sari_laut.jpg',
-      level: 'Tingkatan Level Membuat : Sulit',
-    };
-
-    onSaveRecipe(recipeToSave);
-  };
+const NasiGorengScreen = ({}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.section}>

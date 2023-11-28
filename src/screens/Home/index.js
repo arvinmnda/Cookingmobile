@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Animated } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const BlogList = [
   {
@@ -27,6 +27,10 @@ const BlogList = [
 ];
 const HomeScreen = () => {
   const navigation = useNavigation(); // Dapatkan objek navigasi
+  const route = useRoute();
+  const { params } = route || {};
+  const { recipeId } = params || {};
+  const [searchText, setSearchText] = useState('');
   const scrollY = useRef(new Animated.Value(0)).current;
   const handleRecipePress = (recipeId, recipeType) => {
     // Navigasi ke halaman yang sesuai berdasarkan jenis resep
@@ -48,7 +52,12 @@ const HomeScreen = () => {
     <View style={styles.container}>
     <Animated.Text style={[styles.title, { opacity: headerOpacity }]}>Cooking Food</Animated.Text>
     <View style={styles.searchContainer}>
-      <TextInput style={styles.searchInput} placeholder="Cari resep..." />
+    <TextInput
+        style={styles.searchInput}
+        placeholder="Cari resep..."
+        value={searchText}
+        onChangeText={(text) => setSearchText(text)}
+      />
       <TouchableOpacity style={styles.searchButton}>
         <Text style={styles.buttonText}>Search</Text>
       </TouchableOpacity>
@@ -71,6 +80,9 @@ const HomeScreen = () => {
         </TouchableOpacity>
       ))}
     </ScrollView>
+    <TouchableOpacity onPress={() => handleRecipePress(recipeId, 'Makanan')}>
+        <Text>Resep Nasi Goreng Favorit</Text>
+      </TouchableOpacity>
   </View>
 );
 };

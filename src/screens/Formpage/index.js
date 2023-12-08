@@ -1,13 +1,46 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, Button, Image } from 'react-native';
+import axios from 'axios';
 
-const FormPage = () => {
+const FormPage = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [recipe, setRecipe] = useState('');
+  const [imageLink, setImageLink] = useState('');
+  const [foodType, setFoodType] = useState('');
 
-  const handleSaveButtonClick = () => {
-    console.log('Judul:', title);
-    console.log('Resep:', recipe);
+  const handleSaveButtonClick = async () => {
+    try {
+      const response = await axios.post('https://6571c0f7d61ba6fcc0137436.mockapi.io/cookingmobile/blog', {
+        title,
+        recipe,
+        imageLink,
+        foodType,
+      });
+
+      console.log('Response:', response.data);
+
+      setTitle('');
+      setRecipe('');
+      setImageLink('');
+      setFoodType('');
+
+      navigation.navigate('SimpanScreen');
+    } catch (error) {
+      console.error('Error posting data:', error);
+    }
+  };
+
+  const handleEditButtonClick = () => {
+    // Menyiapkan data untuk halaman 'EditForm'
+    const editFormData = {
+      title,
+      recipe,
+      imageLink,
+      foodType,
+    };
+    
+    // Navigasi ke halaman 'EditForm' dan kirim data yang akan diedit
+    navigation.navigate('EditFrom', { editFormData });
   };
 
   return (
@@ -26,7 +59,21 @@ const FormPage = () => {
         value={recipe}
         onChangeText={setRecipe}
       />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 16, padding: 8 }}
+        placeholder="Link Gambar"
+        value={imageLink}
+        onChangeText={setImageLink}
+      />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 16, padding: 8 }}
+        placeholder="Jenis makanan"
+        dropdownStyle={{ height: 150 }}
+        onChangeText={setFoodType}
+      />
+      {imageLink ? <Image source={{ uri: imageLink }} style={{ width: 200, height: 200, marginBottom: 16 }} /> : null}
       <Button title="Simpan" onPress={handleSaveButtonClick} />
+      <Button title="Edit" onPress={handleEditButtonClick} />
     </View>
   );
 };

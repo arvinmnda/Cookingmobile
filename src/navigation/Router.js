@@ -10,6 +10,7 @@ import MakananScreen from '../screens/Makanan';
 import JusApukatScreen from '../screens/Jus';
 import SateScreen from '../screens/Sate';
 import FormPage from '../screens/Formpage';
+import EditFrom from '../screens/EditFrom';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -25,6 +26,8 @@ const HomeStack = () => {
       <Stack.Screen name="Jus" component={JusApukatScreen} />
       <Stack.Screen name="Sate" component={SateScreen} />
       <Stack.Screen name="FormPage" component={FormPage} />
+      <Stack.Screen name="EditFrom" component={EditFrom} />
+      <Stack.Screen name="Simpan" component={SimpanScreen} />
     </Stack.Navigator>
   );
 };

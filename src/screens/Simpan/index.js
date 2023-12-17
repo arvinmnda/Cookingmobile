@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, Image, Alert } from 'react-native';
-import axios from 'axios';
+import firestore from '@react-native-firebase/firestore';
 
 const SimpanScreen = ({ navigation }) => {
   const [recipes, setRecipes] = useState([]);
@@ -11,15 +11,22 @@ const SimpanScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://6571c0f7d61ba6fcc0137436.mockapi.io/cookingmobile/blog');
-      setRecipes(response.data);
+      const recipeCollection = await firestore().collection('recipes').get();
+      const recipeData = recipeCollection.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setRecipes(recipeData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
   const handleEditButtonClick = (item) => {
-    navigation.navigate('EditFrom', { title: item.title, recipe: item.recipe, imageLink: item.imageLink, foodType: item.foodType });
+    navigation.navigate('EditFrom', {
+      title: item.title,
+      recipe: item.recipe,
+      imageLink: item.imageLink,
+      foodType: item.foodType,
+      id: item.id,
+    });
   };
 
   const handleDeleteButtonClick = async (itemId) => {
@@ -36,8 +43,8 @@ const SimpanScreen = ({ navigation }) => {
           {
             text: 'Hapus',
             onPress: async () => {
-              // Hapus data dari API
-              await axios.delete(`https://6571c0f7d61ba6fcc0137436.mockapi.io/cookingmobile/blog/${itemId}`);
+              // Hapus data dari Firestore
+              await firestore().collection('recipes').doc(itemId).delete();
 
               // Ambil ulang data setelah penghapusan
               fetchData();
@@ -56,7 +63,7 @@ const SimpanScreen = ({ navigation }) => {
       <Text style={{ fontSize: 24, marginBottom: 16 }}>Resep Tersimpan</Text>
       <FlatList
         data={recipes}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={{ marginBottom: 16 }}>
             <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.title}</Text>
@@ -72,5 +79,4 @@ const SimpanScreen = ({ navigation }) => {
     </View>
   );
 };
-
 export default SimpanScreen;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Image, Alert } from 'react-native';
-import axios from 'axios';
+import firestore from '@react-native-firebase/firestore';
 
 const EditForm = ({ route, navigation }) => {
-  const { title: initialTitle, recipe: initialRecipe, imageLink: initialImageLink, foodType: initialFoodType,} = route.params;
+  const { title: initialTitle, recipe: initialRecipe, imageLink: initialImageLink, foodType: initialFoodType, id } = route.params;
   const [title, setTitle] = useState(initialTitle);
   const [recipe, setRecipe] = useState(initialRecipe);
   const [imageLink, setImageLink] = useState(initialImageLink);
@@ -11,30 +11,27 @@ const EditForm = ({ route, navigation }) => {
 
   const handleSaveButtonClick = async () => {
     try {
-      // Pengecekan apakah route.params atau route.params.id sudah diinisialisasi
-      if (!route.params || !route.params.id) {
+      if (!id) {
         console.error('Item ID is missing');
         return;
       }
-      const itemId = route.params.id;
-      const response = await axios.put(`https://6571c0f7d61ba6fcc0137436.mockapi.io/cookingmobile/blog/${itemId}`, {
+
+      await firestore().collection('recipes').doc(id).update({
         title,
         recipe,
         imageLink,
         foodType,
       });
-  
-      console.log('Response:', response.data);
-  
-      // Navigasi kembali ke halaman sebelumnya setelah data terunggah
-      navigation.goBack();
+
+      console.log('Recipe data updated successfully');
+
+      navigation.navigate('Simpan');
     } catch (error) {
       console.error('Error updating data:', error);
     }
   };
 
   useEffect(() => {
-    // Fungsi ini akan dijalankan ketika komponen dimuat, sehingga kita dapat memuat data resep yang akan diedit
     setTitle(initialTitle);
     setRecipe(initialRecipe);
     setImageLink(initialImageLink);

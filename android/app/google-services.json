@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "15745657201",
+    "project_id": "cookingmobile-a0931",
+    "storage_bucket": "cookingmobile-a0931.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15745657201:android:0726949b86d9869d2aeed0",
+        "android_client_info": {
+          "package_name": "com.cookingmobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbxTF867ASEFX6X3C2Q7gp65vqNVhzkGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

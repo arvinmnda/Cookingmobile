@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image } from 'react-native';
-import axios from 'axios';
+import firestore from '@react-native-firebase/firestore';
 
 const FormPage = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -10,21 +10,23 @@ const FormPage = ({ navigation }) => {
 
   const handleSaveButtonClick = async () => {
     try {
-      const response = await axios.post('https://6571c0f7d61ba6fcc0137436.mockapi.io/cookingmobile/blog', {
+      const recipeData = {
         title,
         recipe,
         imageLink,
         foodType,
-      });
+      };
 
-      console.log('Response:', response.data);
+      await firestore().collection('recipes').add(recipeData);
+
+      console.log('Recipe data saved successfully');
 
       setTitle('');
       setRecipe('');
       setImageLink('');
       setFoodType('');
 
-      navigation.navigate('SimpanScreen');
+      navigation.navigate('Simpan');
     } catch (error) {
       console.error('Error posting data:', error);
     }
@@ -38,7 +40,7 @@ const FormPage = ({ navigation }) => {
       imageLink,
       foodType,
     };
-    
+
     // Navigasi ke halaman 'EditForm' dan kirim data yang akan diedit
     navigation.navigate('EditFrom', { editFormData });
   };
@@ -68,7 +70,6 @@ const FormPage = ({ navigation }) => {
       <TextInput
         style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 16, padding: 8 }}
         placeholder="Jenis makanan"
-        dropdownStyle={{ height: 150 }}
         onChangeText={setFoodType}
       />
       {imageLink ? <Image source={{ uri: imageLink }} style={{ width: 200, height: 200, marginBottom: 16 }} /> : null}

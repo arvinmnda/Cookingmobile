@@ -1,4 +1,6 @@
 import Home from './Home';
 import Profile from './Profile';
 import Makanan from './Makanan';
-export {Home, Profile,Makanan};
+import Login from './Login';
+import Register from './Register';
+export {Home, Profile,Makanan,Login,Register};

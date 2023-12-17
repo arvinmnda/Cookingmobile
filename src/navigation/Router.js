@@ -11,12 +11,15 @@ import JusApukatScreen from '../screens/Jus';
 import SateScreen from '../screens/Sate';
 import FormPage from '../screens/Formpage';
 import EditFrom from '../screens/EditFrom';
+import Login from '../screens/Login';
+import Register from '../screens/Register';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
   return (
-    <Stack.Navigator
+    <Stack.Navigator initialRouteName="Login"
       screenOptions={{
         headerShown: false, 
       }}
@@ -28,6 +31,8 @@ const HomeStack = () => {
       <Stack.Screen name="FormPage" component={FormPage} />
       <Stack.Screen name="EditFrom" component={EditFrom} />
       <Stack.Screen name="Simpan" component={SimpanScreen} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
   );
 };
